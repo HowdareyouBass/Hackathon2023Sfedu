@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(Health))]
@@ -33,15 +34,18 @@ public class TargetDetector : MonoBehaviour
 
     public void AddEnemies(GameObject[] enemyGameObjects)
     {
-
-        foreach (GameObject enemy in enemyGameObjects)
+        bool targetsWasEmpty = false;
+        if (_targets.Count == 0)
         {
-            _targets.Add(enemy.transform);
+            targetsWasEmpty = true;
+        }
+        for (int i = 0;i < enemyGameObjects.Length; i++)
+        {
+            _targets.Add(enemyGameObjects[i].transform);
         }
         _targets.Sort(delegate (Transform x, Transform y) { return Vector3.Distance(x.position, Player.Instance.transform.position).CompareTo(Vector3.Distance(y.position, Player.Instance.transform.position)); });
-        if (_isFirstTarget)
+        if (targetsWasEmpty)
         {
-            _isFirstTarget = false;
             GetNextTarget();
         }
     }
