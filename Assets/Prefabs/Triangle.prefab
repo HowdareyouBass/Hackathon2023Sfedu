@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2962777926426900308}
   - component: {fileID: 3996240275526561252}
   - component: {fileID: 5563046367993448023}
+  - component: {fileID: 6933815071282513072}
   m_Layer: 0
   m_Name: Triangle
   m_TagString: Untagged
@@ -178,3 +179,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &6933815071282513072
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5293734447149066852}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f7b2eeeaa8681a42ba9d6caef15a191, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _damage: 10
+  _speed: 0
+  forward: {x: 0, y: 0, z: 0}

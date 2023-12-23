@@ -13,18 +13,13 @@ public class Shooter : MonoBehaviour
     private float _attackCooldownTimeInSeconds;
     private Coroutine _shootingRoutine;
 
-    private void Awake()
-    {
-        
-    }
-
     private void OnEnable()
     {
-        // _shootingRoutine = StartCoroutine(ShootingRoutine());
+        _shootingRoutine = StartCoroutine(ShootingRoutine());
     }
     private void OnDisable()
     {
-        // StopCoroutine(_shootingRoutine);
+        StopCoroutine(_shootingRoutine);
     }
 
     private void FixedUpdate()
@@ -41,7 +36,10 @@ public class Shooter : MonoBehaviour
     }
     private void Shoot()
     {
+        if (Player.Instance.GetComponent<TargetDetector>().CurrentTarget == null)
+            return;
         GameObject projectile = Instantiate(_projectilePrefab, transform.position, Quaternion.FromToRotation(transform.position, Player.Instance.GetComponent<TargetDetector>().CurrentTarget.position));
+        Debug.Log(Player.Instance.GetComponent<TargetDetector>().CurrentTarget.position - transform.position);
         projectile.GetComponent<PlayerProjectile>().forward = Player.Instance.GetComponent<TargetDetector>().CurrentTarget.position - transform.position; 
     }
 }
