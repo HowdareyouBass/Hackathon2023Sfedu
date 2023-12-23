@@ -59,6 +59,8 @@ public class TargetDetector : MonoBehaviour
 
     private void GetNextTarget()
     {
+        Debug.Log("Get next target");
+
         if (_targets.Count == 0)
         {
             return;

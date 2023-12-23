@@ -7,10 +7,11 @@ public class EnemyCollisionController : MonoBehaviour
 {
     void OnTriggerEnter2D(Collider2D collider)
     {
+        Debug.Log("Trigger enter");
         if (collider.transform == Player.Instance.transform)
         {
             Player.Instance.GetComponent<Health>().Reduce(transform.GetComponent<Enemy>().Damage);
-            Destroy(gameObject, 0.1f);
+            Destroy(gameObject);
         }
     }
 }
