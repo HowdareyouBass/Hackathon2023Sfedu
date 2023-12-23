@@ -8,7 +8,7 @@ using System;
 public class DeviceTab : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _nameText;
-    [SerializeField] private TextMeshProUGUI _addressText;
+    [SerializeField] private TextMeshProUGUI _serialText;
 
     private SensorInfo _info;
     private int _index;
@@ -20,7 +20,7 @@ public class DeviceTab : MonoBehaviour
         _info = info;
 
         _nameText.text = info.Name;
-        _addressText.text = info.Address;
+        _serialText.text = info.SerialNumber;
         _index = index;
 
         onTabClicked = clicked;

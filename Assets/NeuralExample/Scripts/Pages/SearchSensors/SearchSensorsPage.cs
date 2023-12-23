@@ -75,7 +75,8 @@ public class SearchSensorsPage : MonoBehaviour, IPage
         BrainBitController.Instance.CreateAndConnect(info, (state) =>
         {
             if (state == SensorState.StateInRange) {
-                BackendManager.Instance.ToMenuPage();
+                //BackendManager.Instance.ToMenuPage();
+                BackendEMOManager.Instance.ToResistPage();
             }
             else {
                 Debug.Log("Device not connected!");
