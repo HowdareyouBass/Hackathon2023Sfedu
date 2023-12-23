@@ -23,10 +23,12 @@ public class TargetDetector : MonoBehaviour
     private void OnEnable()
     {
         _playerHealth.Hit += GetNextTarget;
+        GlobalEvents.AnyEnemyKilled += GetNextTarget;
     }
     private void OnDisable()
     {
         _playerHealth.Hit -= GetNextTarget;
+        GlobalEvents.AnyEnemyKilled -= GetNextTarget;
     }
 
     public void AddEnemies(GameObject[] enemyGameObjects)
@@ -53,10 +55,11 @@ public class TargetDetector : MonoBehaviour
 
     private void GetNextTarget()
     {
-        if (CurrentTarget != null)
-            CurrentTarget.GetComponent<Health>().Death -= GetNextTarget;
+        if (_targets.Count == 0)
+        {
+            return;
+        }
         CurrentTarget = GetTarget();
         TargetChanged?.Invoke();
-        CurrentTarget.GetComponent<Health>().Death += GetNextTarget;
     }
 }
