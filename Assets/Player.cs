@@ -6,6 +6,8 @@ public class Player : MonoBehaviour
 {
     public static Player Instance { get; private set; }
     public event Action Died;
+    public float Signal;
+    public int Damage = 5;
 
     private void Awake()
     {
@@ -23,6 +25,15 @@ public class Player : MonoBehaviour
     {
         Health playerHealth = GetComponent<Health>();
         playerHealth.Death += Die;
+        playerHealth.Hit += Twitch;
+    }
+    private void Update()
+    {
+
+    }
+    private void Twitch()
+    {
+        
     }
 
     private void Die()
