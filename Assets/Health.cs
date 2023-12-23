@@ -6,6 +6,7 @@ public class Health : MonoBehaviour
 {
     public event Action Death;
     public event Action<float> Reduced;
+    public event Action Hit;
 
     [SerializeField] private float _maxHealth;
     public float CurrentHealth{get; private set;}
@@ -16,6 +17,7 @@ public class Health : MonoBehaviour
 
         CurrentHealth -= amount;
         Reduced?.Invoke(amount);
+        Hit?.Invoke();
         if (CurrentHealth <= 0)
         {
             Death?.Invoke();

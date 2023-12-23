@@ -8,8 +8,17 @@ public class TargetEffectDrawer : MonoBehaviour
     [SerializeField] private GameObject _effectPrefab;
     [SerializeField] private TargetDetector _targetDetector;
 
-    public void Draw()
+    private void OnEnable()
     {
-        Instantiate(_effectPrefab, _targetDetector.GetTarget());
+        _targetDetector.TargetChanged += Draw;
+    }
+    private void OnDisable()
+    {
+        _targetDetector.TargetChanged -= Draw;
+    }
+
+    private void Draw()
+    {
+        Instantiate(_effectPrefab, _targetDetector.CurrentTarget);
     }
 }

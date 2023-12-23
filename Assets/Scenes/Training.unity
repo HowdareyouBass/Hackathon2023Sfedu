@@ -442,9 +442,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1577607565}
+      - m_Target: {fileID: 1175896912}
         m_TargetAssemblyTypeName: TargetEffectDrawer, Assembly-CSharp
-        m_MethodName: Draw
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
