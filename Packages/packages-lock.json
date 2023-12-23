@@ -5,7 +5,13 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "570733e825dd665d6264dc89e088e5624397c625"
+      "hash": "fec9734633631b4e8c4ea556eeb66c59afc6163c"
+    },
+    "com.unity.2d.sprite": {
+      "version": "1.0.0",
+      "depth": 0,
+      "source": "builtin",
+      "dependencies": {}
     },
     "com.unity.2d.animation": {
       "version": "9.0.4",
