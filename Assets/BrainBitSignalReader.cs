@@ -144,5 +144,6 @@ public class BrainBitSignalReader : MonoBehaviour
     public void Exit()
     {
         BrainBitController.Instance.StopSignal();
+        BrainBitController.Instance.DisconnectCurrent();
     }
 }
