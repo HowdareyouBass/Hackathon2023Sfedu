@@ -11,10 +11,6 @@ public class BrainBitSignalReader : MonoBehaviour
     public static double Concetration { get; private set; }
     public static int CalibrationProgress { get; private set; }
 
-    [SerializeField] private ChartManager AlphaRuthm;
-    [SerializeField] private ChartManager BetaRuthm;
-
-    private Coroutine _updateChartsCoroutine;
     private List<BrainBitSignalData> _signalData = new List<BrainBitSignalData>();
     private readonly object locker = new object();
     private EegEmotionalMath _math;
@@ -32,35 +28,7 @@ public class BrainBitSignalReader : MonoBehaviour
         Exit();
     }
 
-    private IEnumerator UpdateCharts()
-    {
-        while (true)
-        {
-            lock (locker)
-            {
-                int samplesCount = _signalData.Count;
-                if (samplesCount > 0)
-                {
-                    var dataAlpha = new double[samplesCount];
-                    var dataBeta = new double[samplesCount];
-
-                    for (int i = 0; i < samplesCount; i++)
-                    {
-                        dataAlpha[i] = Relaxation;
-                        dataBeta[i] = Concetration;
-                    }
-
-                    AlphaRuthm.AddData(dataAlpha);
-                    BetaRuthm.AddData(dataBeta);
-
-                    _signalData.Clear();
-                }
-            }
-
-            yield return new WaitForSeconds(0.06f);
-        }
-    }
-
+    
     public void UpdateSignal()
     {
         if (_started)
@@ -173,12 +141,11 @@ public class BrainBitSignalReader : MonoBehaviour
 
     public void Enter()
     {
-        _updateChartsCoroutine = StartCoroutine(UpdateCharts());
+        
     }
 
     public void Exit()
     {
-        StopCoroutine(_updateChartsCoroutine);
         BrainBitController.Instance.StopSignal();
         BrainBitController.Instance.DisconnectCurrent();
     }

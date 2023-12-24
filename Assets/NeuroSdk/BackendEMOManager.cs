@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -38,7 +40,7 @@ public class BackendEMOManager : MonoBehaviour
         _deviceSearchEMOScreen.SetActive(true);
     }
 
-    public IEnumerator ToTrainPageCoroutine()
+    public IEnumerator WaitForSync(Action action)
     {
         if (_bitSignalReader.activeInHierarchy)
         {
@@ -54,34 +56,20 @@ public class BackendEMOManager : MonoBehaviour
         _deviceSearchEMOScreen.SetActive(false);
         _menuEMOScreen.SetActive(false);
         _resistEMOScreen.SetActive(false);
-        _gameObjects.SetActive(true);
-        _trainingPage.SetActive(true);
+
+        action.Invoke();
         yield break;
     }
     public void ToTrainingPage()
     {
-        StartCoroutine(ToTrainPageCoroutine());
-        // if (_bitSignalReader.activeInHierarchy)
-        // {
-        //     _loadingScreen.SetActive(true);
-        //     while (BrainBitSignalReader.CalibrationProgress != 100)
-        //     {
-        //         Debug.Log("Waiting for the calibration");
-        //     }
-        //     _loadingScreen.SetActive(false);
-        // }
-
-        // _deviceSearchEMOScreen.SetActive(false);
-        // _menuEMOScreen.SetActive(false);
-        // _resistEMOScreen.SetActive(false);
-        // _gameObjects.SetActive(true);
-        // _trainingPage.SetActive(true);
+        Action action = new Action(() => _gameObjects.SetActive(true));
+        action += () => _trainingPage.SetActive(true);
+        StartCoroutine(WaitForSync(action));
     }
     public void ToAnalPage()
     {
-        _menuEMOScreen.SetActive(false);
-        _resistEMOScreen.SetActive(false);
-        _analPage.SetActive(true);
+        Action action = new Action(() => _analPage.SetActive(true));
+        StartCoroutine(WaitForSync(action));
     }
 
     public void ToMenuPage()
