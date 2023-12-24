@@ -1,11 +1,14 @@
 using UnityEngine;
+using TMPro;
 
 public class Test : MonoBehaviour
 {
-    [SerializeField] private TargetDetector _targetDetector;
+    [SerializeField] private TMP_Text _text;
+    [SerializeField] private TMP_Text _text1s;
 
-    public void KillTarget()
+    private void Update()
     {
-        _targetDetector.CurrentTarget.GetComponent<Health>().Reduce(1000000);
+        _text.text = Plug.Relaxation.ToString();
+        _text1s.text = Plug.Desired.ToString();
     }
 }

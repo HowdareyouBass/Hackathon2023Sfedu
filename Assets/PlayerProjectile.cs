@@ -9,12 +9,23 @@ public class PlayerProjectile : MonoBehaviour
     private Rigidbody2D _rb;
 
     // Specify to direct your projectile  
-    public Vector3 forward;
+    public Vector2 forward;
+
+    public void SetForward(Vector2 vector)
+    {
+        forward = vector;
+        forward.Normalize();
+        _rb.velocity = forward * _speed;
+    }
 
     private void Start()
     {
+        Init();
+    }
+
+    public void Init()
+    {
         _rb = GetComponent<Rigidbody2D>();
-        _rb.velocity = Vector3.Normalize(forward) * _speed;
     }
 
     private void OnTriggerEnter2D(Collider2D collider)

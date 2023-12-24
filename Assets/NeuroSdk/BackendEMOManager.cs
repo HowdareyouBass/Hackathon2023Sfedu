@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class BackendEMOManager : MonoBehaviour
@@ -9,8 +10,10 @@ public class BackendEMOManager : MonoBehaviour
     [SerializeField] private GameObject _deviceSearchEMOScreen;
     [SerializeField] private GameObject _resistEMOScreen;
     [SerializeField] private GameObject _menuEMOScreen;
-    [SerializeField] private GameObject _trainerEMOScreen;
-    [SerializeField] private GameObject _analysisEMOScreen;
+    [SerializeField] private GameObject _analPage;
+    [SerializeField] private GameObject _trainingPage;
+
+    [SerializeField] private GameObject _bitSignalReader;
     
         
     void Awake()
@@ -29,23 +32,23 @@ public class BackendEMOManager : MonoBehaviour
 
     public void ToSearchPage()
     {
-        _deviceSearchEMOScreen.gameObject.SetActive(true);
+        _deviceSearchEMOScreen.SetActive(true);
+    }
+    public void ToTrainingPage()
+    {
+        _menuEMOScreen.SetActive(false);
+        _trainingPage.SetActive(true);
+    }
+    public void ToAnalPage()
+    {
+        _menuEMOScreen.SetActive(false);
+        _analPage.SetActive(true);
     }
 
     public void ToMenuPage()
     {
         _menuEMOScreen.gameObject.SetActive(true);
-    }
-
-
-    public void ToTrainPage()
-    {
-        _trainerEMOScreen.SetActive(true);
-    }
-
-    public void ToAnalPage() 
-    {
-        _analysisEMOScreen.SetActive(true);
+        _bitSignalReader.SetActive(true);
     }
 
     public void ToResistPage() 

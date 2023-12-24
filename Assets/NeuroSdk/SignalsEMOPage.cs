@@ -4,30 +4,19 @@ using TMPro;
 using System.Collections;
 using System.Collections.Generic;
 using NeuroSDK;
+using Unity.Mathematics;
 
 public class SignalsEMOPage : MonoBehaviour, IPage
 {
-    [SerializeField] private TextMeshProUGUI _StartSignalText;
+    public static double Relaxation { get; private set; }
+    public static double Concetration { get; private set; }
 
-    private IEnumerator _updateChartsCoroutine;
     private List<BrainBitSignalData> _signalData = new List<BrainBitSignalData>();
     private readonly object locker = new object();
     private EegEmotionalMath _math;
-    private Coroutine _updateDataCoroutine;
 
     private bool _started = false;
-    private bool started {
-        get { return _started; }
-        set
-        {
-            if (value != _started) {
-                _started = value;
-                _StartSignalText.text = _started ? "Stop" : "Start";
-            }
 
-        }
-    }
-    
     public void ChannelsDropdownItemSelected(TMP_Dropdown dropdown)
     {
         //BackendManager.Instance.ChartManager.SelectedChannel = dropdown.value;
@@ -35,15 +24,16 @@ public class SignalsEMOPage : MonoBehaviour, IPage
 
     public void UpdateSignal()
     {
-        if (started)
+        if (_started)
         {
             BrainBitController.Instance.StopSignal();
         }
-        else 
+        else
         {
-            BrainBitController.Instance.StartSignal((samples) => {
+            BrainBitController.Instance.StartSignal((samples) =>
+            {
 
-                if (samples != null && samples.Length > 0) 
+                if (samples != null && samples.Length > 0)
                 {
                     lock (locker)
                     {
@@ -66,34 +56,39 @@ public class SignalsEMOPage : MonoBehaviour, IPage
 
                             _math.PushData(samples1);
                             _math.ProcessDataArr();
-                            Debug.Log("Art: " + _math.IsArtifactedSequence());
-
+                            // Debug.Log(_math.IsBothSidesArtifacted());
                             bool calibrationFinished = _math.CalibrationFinished();
                             // and calibration progress
                             int calibrationProgress = _math.GetCallibrationPercents();
-                            Debug.Log("C = " + calibrationProgress);
+                            // Debug.Log("C: " + calibrationProgress.ToString());
+                            while (!calibrationFinished)
+                            {
+                                // Wait for the calibration to finish
+                            }
 
                             MindData[] mentalData = _math.ReadMentalDataArr();
                             for (int i = 0; i < mentalData.Length; i++)
                             {
-                                Debug.Log("InstAttention: " + mentalData[i].RelAttention.ToString());
-                                Debug.Log("InstRelaxation: " + mentalData[i].RelRelaxation.ToString());
+                                Concetration = mentalData[i].RelAttention;
+                                Debug.Log(mentalData[i].RelAttention);
+                                Debug.Log(mentalData[i].RelRelaxation);
+                                Relaxation = mentalData[i].RelRelaxation;
                             }
                             SpectralDataPercents[] spData = _math.ReadSpectralDataPercentsArr();
-                            if (spData.Length > 0) Debug.Log(spData[0].Alpha);
                             _signalData.Clear();
 
                         }
                     }
-                        
+
                 }
             });
         }
-        started = !started;
+        _started = !_started;
     }
 
     private void OnEnable()
     {
+        DontDestroyOnLoad(gameObject);
         CalibrAndSignal();
         Enter();
     }
@@ -112,7 +107,7 @@ public class SignalsEMOPage : MonoBehaviour, IPage
             process_win_freq = 25,
             n_first_sec_skipped = 4,
             fft_window = (uint)samplingFrequency * 4,
-            squared_spectrum=true,
+            squared_spectrum = true,
             bipolar_mode = true,
             channels_number = 4,
             channel_for_analysis = 0
@@ -149,59 +144,13 @@ public class SignalsEMOPage : MonoBehaviour, IPage
         UpdateSignal();
     }
 
-    private IEnumerator UpdateData()
-    {
-        while (true)
-        {
-            lock (locker)
-            {
-                int samplesCount = _signalData.Count;
-                if (samplesCount > 0)
-                {
-                    var samples = new RawChannels[_signalData.Count];
-                     for (int i = 0; i < _signalData.Count; i++)
-                     {
-                         samples[i].LeftBipolar = _signalData[i].T3 - _signalData[i].O1;
-                        // Debug.Log(_signalData[i].T3 - _signalData[i].O1);
-                         samples[i].RightBipolar = _signalData[i].T4 - _signalData[i].O2;
-                        // Debug.Log(_signalData[i].T3 - _signalData[i].O1);
-                     }
-                
-
-
-                    _math.PushData(samples);
-                    _math.ProcessDataArr();
-                    Debug.Log("Art: " + _math.IsArtifactedSequence());
-
-                    bool calibrationFinished = _math.CalibrationFinished();
-                    // and calibration progress
-                    int calibrationProgress = _math.GetCallibrationPercents();
-                    Debug.Log("C = " + calibrationProgress);
-
-                    MindData[] mentalData = _math.ReadMentalDataArr();
-                    for (int i = 0; i < mentalData.Length; i++)
-                    {
-                        Debug.Log("InstAttention: " + mentalData[i].RelAttention.ToString());
-                        Debug.Log("InstRelaxation: " + mentalData[i].RelRelaxation.ToString());
-                    }
-                    SpectralDataPercents[] spData = _math.ReadSpectralDataPercentsArr();
-                    if(spData.Length > 0) Debug.Log(spData[0].Alpha);
-                    _signalData.Clear();
-                }
-            }
-
-            yield return new WaitForSeconds(0.06f);
-        }
-    }
-
     public void Enter()
     {
         //_updateDataCoroutine = StartCoroutine(UpdateData());
-    } 
+    }
 
     public void Exit()
     {
-        StopCoroutine(_updateDataCoroutine);
         BrainBitController.Instance.StopSignal();
     }
 }
