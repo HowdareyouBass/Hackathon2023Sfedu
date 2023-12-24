@@ -219,6 +219,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66f45ff40ba33d641be0e1f40b40c4b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _renderer: {fileID: 2627557}
 --- !u!1 &111387675
 GameObject:
   m_ObjectHideFlags: 0
@@ -250,6 +251,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8ad883e5995e6242b50319eebf9a120, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _startSearchButtonText: {fileID: 0}
+  _devicesList: {fileID: 0}
 --- !u!114 &111387677
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -353,6 +356,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8eb9c555a13a15b458ffd5aba1064ac0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _effectPrefab: {fileID: 4129893792925533758, guid: 1469c21d715eede45affe1fbdffd06bd, type: 3}
+  _targetDetector: {fileID: 247033804}
 --- !u!1 &161244332
 GameObject:
   m_ObjectHideFlags: 0
@@ -426,6 +431,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4652a5ab5e9401d45bb2d41a53196b64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _StartResistText: {fileID: 0}
+  _O1Value: {fileID: 0}
+  _O2Value: {fileID: 0}
+  _T3Value: {fileID: 0}
+  _T4Value: {fileID: 0}
+  T4_checkF: {fileID: 0}
+  T3_checkF: {fileID: 0}
+  O2_checkF: {fileID: 0}
+  O1_checkF: {fileID: 0}
 --- !u!114 &161244335
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -589,6 +603,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f74b03c6defae234290d2901b33107f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _baseAttackSpeed: 1
+  _signalReader: {fileID: 976215998}
+  _projectilePrefab: {fileID: 5293734447149066852, guid: 634c0a8ebdcac2540b069f60229d1e38, type: 3}
 --- !u!114 &247033806
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -634,6 +651,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cda24703e790d7c49a534acea21cc1f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MaxHealth: 100
 --- !u!114 &247033809
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -646,6 +664,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cba42cf2218521f49b32dcd8d4e70c29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Signal: 0
+  Damage: 5
 --- !u!58 &247033810
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -772,6 +792,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02051d41f92136c4e96e77fd81ed0c4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Value: 0
 --- !u!1001 &272385273
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -919,6 +940,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53450417752a2d447bfc8d36ebd1a558, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _deviceSearchEMOScreen: {fileID: 0}
+  _resistEMOScreen: {fileID: 0}
+  _menuEMOScreen: {fileID: 0}
+  _analPage: {fileID: 0}
+  _trainingPage: {fileID: 0}
+  _bitSignalReader: {fileID: 0}
 --- !u!4 &306359673
 Transform:
   m_ObjectHideFlags: 0
@@ -966,6 +993,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2fab1984d0651a4099a960a0c77f634, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _scrollView: {fileID: 0}
+  _scrollViewContent: {fileID: 0}
+  _scrollbar: {fileID: 0}
+  _itemPrefab: {fileID: 0}
+  onClick:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!224 &311750441
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1288,6 +1322,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62a1b3003996ce14a923e99e9d294e8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _waitInSeconds: 0
+  _checks: []
 --- !u!1 &418912419
 GameObject:
   m_ObjectHideFlags: 0
@@ -5706,6 +5742,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcc461e87ef5d6e43bcaf8f67aa57e7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _mainCamera: {fileID: 556029621}
+  _offset: {x: 10, y: 10, z: 0}
 --- !u!114 &2125132504
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5718,6 +5756,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b01fced9a00c67e4ab20f124c7eaa857, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _levels:
+  - {fileID: 11400000, guid: 170dfa1d2521a674b8c95e0c159733fa, type: 2}
+  _targetDetector: {fileID: 247033804}
+  _enemySpawner: {fileID: 2125132503}
 --- !u!1001 &4007382204518771326
 PrefabInstance:
   m_ObjectHideFlags: 0
