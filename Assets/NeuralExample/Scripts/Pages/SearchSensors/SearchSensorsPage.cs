@@ -61,7 +61,6 @@ public class SearchSensorsPage : MonoBehaviour, IPage
             isSearching = true;
             _devicesList.ShowList();
             BrainBitController.Instance.StartSearch(SensorsFounded);
-            _devicesList.ShowList();
 
         }
         else

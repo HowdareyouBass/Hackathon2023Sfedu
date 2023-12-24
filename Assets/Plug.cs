@@ -11,7 +11,7 @@ public class Plug : MonoBehaviour
     public static double Concetration = 0.1;
     public static double Desired = 0.5;
 
-    private const double AMOUNT = 0.25f;
+    private const double AMOUNT = 0.15f;
 
     private double _desiredConcetration = 0.5;
     private double _realConcetration = 0.1;

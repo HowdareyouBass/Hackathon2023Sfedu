@@ -10,6 +10,7 @@ public class BrainBitSignalReader : MonoBehaviour
     public static double Relaxation { get; private set; }
     public static double Concetration { get; private set; }
     public static int CalibrationProgress { get; private set; }
+    public static bool AreThereArtifacts { get; private set; }
 
     private List<BrainBitSignalData> _signalData = new List<BrainBitSignalData>();
     private readonly object locker = new object();
@@ -28,7 +29,7 @@ public class BrainBitSignalReader : MonoBehaviour
         Exit();
     }
 
-    
+
     public void UpdateSignal()
     {
         if (_started)
@@ -63,22 +64,22 @@ public class BrainBitSignalReader : MonoBehaviour
 
                             _math.PushData(samples1);
                             _math.ProcessDataArr();
-                            Debug.Log(_math.IsBothSidesArtifacted());
+                            AreThereArtifacts = _math.IsBothSidesArtifacted();
                             // and calibration progress
                             CalibrationProgress = _math.GetCallibrationPercents();
                             Debug.Log("C: " + CalibrationProgress.ToString());
 
                             // while(!calibrationFinished)
                             // {
-                                // Wait for the calibration
+                            // Wait for the calibration
                             // }
 
                             MindData[] mentalData = _math.ReadMentalDataArr();
                             for (int i = 0; i < mentalData.Length; i++)
                             {
                                 Concetration = mentalData[i].RelAttention;
-                               // Debug.Log(mentalData[i].RelAttention);
-                               // Debug.Log(mentalData[i].RelRelaxation);
+                                // Debug.Log(mentalData[i].RelAttention);
+                                // Debug.Log(mentalData[i].RelRelaxation);
                                 Relaxation = mentalData[i].RelRelaxation;
                             }
                             SpectralDataPercents[] spData = _math.ReadSpectralDataPercentsArr();
@@ -141,7 +142,7 @@ public class BrainBitSignalReader : MonoBehaviour
 
     public void Enter()
     {
-        
+
     }
 
     public void Exit()
