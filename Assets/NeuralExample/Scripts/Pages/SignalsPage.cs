@@ -1,4 +1,5 @@
 using UnityEngine;
+using SignalMath;
 using TMPro;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,14 +9,16 @@ public class SignalsPage : MonoBehaviour, IPage
 {
     [SerializeField] private TextMeshProUGUI _StartSignalText;
 
-    [SerializeField] private ChartManager _o1chart;
-    [SerializeField] private ChartManager _o2chart;
-    [SerializeField] private ChartManager _t3chart;
-    [SerializeField] private ChartManager _t4chart;
+    [SerializeField] private ChartManager AlphaRuthm;
+    [SerializeField] private ChartManager BetaRuthm;
+
+    public static double Relaxation { get; private set; }
+    public static double Concetration { get; private set; }
 
     private IEnumerator _updateChartsCoroutine;
     private List<BrainBitSignalData> _signalData = new List<BrainBitSignalData>();
     private readonly object locker = new object();
+    private EegEmotionalMath _math;
 
     private bool _started = false;
     private bool started {
@@ -41,23 +44,17 @@ public class SignalsPage : MonoBehaviour, IPage
             {
                 int samplesCount = _signalData.Count;
                 if (samplesCount > 0) {
-                    var dataO1 = new double[samplesCount];
-                    var dataO2 = new double[samplesCount];
-                    var dataT3 = new double[samplesCount];
-                    var dataT4 = new double[samplesCount];
+                    var dataAlpha = new double[samplesCount];
+                    var dataBeta = new double[samplesCount];
 
                     for (int i = 0; i < samplesCount; i++)
                     {
-                        dataO1[i] = _signalData[i].O1;
-                        dataO2[i] = _signalData[i].O2;
-                        dataT3[i] = _signalData[i].T3;
-                        dataT4[i] = _signalData[i].T4;
+                        dataAlpha[i] = Relaxation;
+                        dataBeta[i] = Concetration;
                     }
 
-                    _o1chart.AddData(dataO1);
-                    _o2chart.AddData(dataO2);
-                    _t3chart.AddData(dataT3);
-                    _t4chart.AddData(dataT4);
+                    AlphaRuthm.AddData(dataAlpha);
+                    BetaRuthm.AddData(dataBeta);
 
                     _signalData.Clear();
                 }
@@ -79,10 +76,48 @@ public class SignalsPage : MonoBehaviour, IPage
 
                 if (samples != null && samples.Length > 0) 
                 {
-                    lock (locker) {
+                    lock (locker)
+                    {
+                        _signalData.Clear();
                         _signalData.AddRange(samples);
+
+                        int samplesCount = _signalData.Count;
+                        if (samplesCount > 0)
+                        {
+                            var samples1 = new RawChannels[_signalData.Count];
+                            for (int i = 0; i < _signalData.Count; i++)
+                            {
+                                samples1[i].LeftBipolar = _signalData[i].T3 - _signalData[i].O1;
+                                samples1[i].RightBipolar = _signalData[i].T4 - _signalData[i].O2;
+                            }
+
+
+
+                            _math.PushData(samples1);
+                            _math.ProcessDataArr();
+                            bool calibrationFinished = _math.CalibrationFinished();
+                            // and calibration progress
+                            int calibrationProgress = _math.GetCallibrationPercents();
+                            while (!calibrationFinished)
+                            {
+                                // Wait for the calibration to finish
+                            }
+
+                            MindData[] mentalData = _math.ReadMentalDataArr();
+                            for (int i = 0; i < mentalData.Length; i++)
+                            {
+                                Concetration = mentalData[i].RelAttention;
+                                Debug.Log(mentalData[i].RelAttention);
+                                Debug.Log(mentalData[i].RelRelaxation);
+                                Relaxation = mentalData[i].RelRelaxation;
+                            }
+                            SpectralDataPercents[] spData = _math.ReadSpectralDataPercentsArr();
+                            _signalData.Clear();
+
+                        }
                     }
-                        
+
+
                 }
             });
         }

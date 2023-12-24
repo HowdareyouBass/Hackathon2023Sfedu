@@ -47,20 +47,16 @@ public class SignalsEMOPage : MonoBehaviour, IPage
                             for (int i = 0; i < _signalData.Count; i++)
                             {
                                 samples1[i].LeftBipolar = _signalData[i].T3 - _signalData[i].O1;
-                                // Debug.Log(_signalData[i].T3 - _signalData[i].O1);
                                 samples1[i].RightBipolar = _signalData[i].T4 - _signalData[i].O2;
-                                // Debug.Log(_signalData[i].T3 - _signalData[i].O1);
                             }
 
 
 
                             _math.PushData(samples1);
                             _math.ProcessDataArr();
-                            // Debug.Log(_math.IsBothSidesArtifacted());
                             bool calibrationFinished = _math.CalibrationFinished();
                             // and calibration progress
                             int calibrationProgress = _math.GetCallibrationPercents();
-                            // Debug.Log("C: " + calibrationProgress.ToString());
                             while (!calibrationFinished)
                             {
                                 // Wait for the calibration to finish
