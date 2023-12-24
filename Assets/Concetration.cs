@@ -10,7 +10,7 @@ public class Concetration : MonoBehaviour
 
     private void Update()
     {
-        Value = (float)Plug.Relaxation;
+        Value = (float)Plug.Concetration;
         Changed?.Invoke();
     }
 }

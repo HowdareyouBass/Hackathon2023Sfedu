@@ -8,7 +8,7 @@ public class Test : MonoBehaviour
 
     private void Update()
     {
-        _text.text = Plug.Relaxation.ToString();
+        _text.text = Plug.Concetration.ToString();
         _text1s.text = Plug.Desired.ToString();
     }
 }

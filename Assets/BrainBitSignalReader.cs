@@ -13,6 +13,8 @@ public class BrainBitSignalReader : MonoBehaviour
     private readonly object locker = new object();
     private EegEmotionalMath _math;
 
+    public static int CalibrationProgress {get; private set;} = 0;
+
     private bool _started = false;
 
     private void OnEnable()
@@ -61,10 +63,9 @@ public class BrainBitSignalReader : MonoBehaviour
                             _math.PushData(samples1);
                             _math.ProcessDataArr();
                             Debug.Log(_math.IsBothSidesArtifacted());
-                            bool calibrationFinished = _math.CalibrationFinished();
                             // and calibration progress
-                            int calibrationProgress = _math.GetCallibrationPercents();
-                            Debug.Log("C: " + calibrationProgress.ToString());
+                            CalibrationProgress = _math.GetCallibrationPercents();
+                            //Debug.Log("C: " + _calibrationProgress.ToString());
 
                             // while(!calibrationFinished)
                             // {
@@ -75,8 +76,8 @@ public class BrainBitSignalReader : MonoBehaviour
                             for (int i = 0; i < mentalData.Length; i++)
                             {
                                 Concetration = mentalData[i].RelAttention;
-                                Debug.Log(mentalData[i].RelAttention);
-                                Debug.Log(mentalData[i].RelRelaxation);
+                                //Debug.Log(mentalData[i].RelAttention);
+                                //Debug.Log(mentalData[i].RelRelaxation);
                                 Relaxation = mentalData[i].RelRelaxation;
                             }
                             SpectralDataPercents[] spData = _math.ReadSpectralDataPercentsArr();
@@ -144,5 +145,6 @@ public class BrainBitSignalReader : MonoBehaviour
     public void Exit()
     {
         BrainBitController.Instance.StopSignal();
+        BrainBitController.Instance.DisconnectCurrent();
     }
 }

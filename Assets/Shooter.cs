@@ -7,7 +7,6 @@ public class Shooter : MonoBehaviour
     public event Action Shot;
 
     [SerializeField] private float _baseAttackSpeed;
-    [SerializeField] private BrainBitSignalReader _signalReader;
     [SerializeField] private GameObject _projectilePrefab;
 
     private readonly object locker = new object();
@@ -34,7 +33,7 @@ public class Shooter : MonoBehaviour
     {
         lock (locker)
         {
-            _attackCooldownTimeInSeconds = _baseAttackSpeed * (float)_concetration.Value * 10;
+            _attackCooldownTimeInSeconds = _baseAttackSpeed / ((float)_concetration.Value * 10);
         }
         // _attackCooldownTimeInSeconds = (float)BrainBitSignalReader.Relaxation * _baseAttackSpeed;
     }

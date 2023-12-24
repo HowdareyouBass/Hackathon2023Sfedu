@@ -6,6 +6,7 @@ using UnityEngine;
 public class BackendEMOManager : MonoBehaviour
 {
     public static BackendEMOManager Instance;
+    public bool EnableSignalReader = false;
 
     [SerializeField] private GameObject _deviceSearchEMOScreen;
     [SerializeField] private GameObject _resistEMOScreen;
@@ -14,6 +15,8 @@ public class BackendEMOManager : MonoBehaviour
     [SerializeField] private GameObject _trainingPage;
 
     [SerializeField] private GameObject _bitSignalReader;
+    [SerializeField] private GameObject _loadingScreen;
+    [SerializeField] private GameObject _gameObjects;
     
         
     void Awake()
@@ -34,11 +37,45 @@ public class BackendEMOManager : MonoBehaviour
     {
         _deviceSearchEMOScreen.SetActive(true);
     }
-    public void ToTrainingPage()
+
+    public IEnumerator ToTrainPageCoroutine()
     {
+        if (_bitSignalReader.activeInHierarchy)
+        {
+            _loadingScreen.SetActive(true);
+            while (BrainBitSignalReader.CalibrationProgress != 100)
+            {
+                Debug.Log("Waiting for the calibration");
+                yield return null;
+            }
+            _loadingScreen.SetActive(false);
+        }
+
+        _deviceSearchEMOScreen.SetActive(false);
         _menuEMOScreen.SetActive(false);
         _resistEMOScreen.SetActive(false);
+        _gameObjects.SetActive(true);
         _trainingPage.SetActive(true);
+        yield break;
+    }
+    public void ToTrainingPage()
+    {
+        StartCoroutine(ToTrainPageCoroutine());
+        // if (_bitSignalReader.activeInHierarchy)
+        // {
+        //     _loadingScreen.SetActive(true);
+        //     while (BrainBitSignalReader.CalibrationProgress != 100)
+        //     {
+        //         Debug.Log("Waiting for the calibration");
+        //     }
+        //     _loadingScreen.SetActive(false);
+        // }
+
+        // _deviceSearchEMOScreen.SetActive(false);
+        // _menuEMOScreen.SetActive(false);
+        // _resistEMOScreen.SetActive(false);
+        // _gameObjects.SetActive(true);
+        // _trainingPage.SetActive(true);
     }
     public void ToAnalPage()
     {
@@ -50,11 +87,15 @@ public class BackendEMOManager : MonoBehaviour
     public void ToMenuPage()
     {
         _menuEMOScreen.gameObject.SetActive(true);
-        _bitSignalReader.SetActive(true);
+        if (EnableSignalReader)
+        {
+            _bitSignalReader.SetActive(true);
+        }
     }
 
     public void ToResistPage() 
     {
+        EnableSignalReader = true;
         _resistEMOScreen.SetActive(true);
         _deviceSearchEMOScreen.SetActive(false);
     }
