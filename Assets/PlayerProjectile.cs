@@ -5,6 +5,7 @@ public class PlayerProjectile : MonoBehaviour
 {
     [SerializeField] private float _damage = 10;
     [SerializeField] private float _speed = 3;
+    [SerializeField] private GameObject _effectPrefab;
 
     private Rigidbody2D _rb;
 
@@ -33,6 +34,7 @@ public class PlayerProjectile : MonoBehaviour
         if (collider.TryGetComponent<Health>(out Health health) && collider.transform != Player.Instance.transform)
         {
             health.Reduce(_damage);
+            Instantiate(_effectPrefab, transform.position, Quaternion.identity);
             Destroy(gameObject);
         }
     }

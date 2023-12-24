@@ -133,6 +133,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _damage: 10
   _speed: 5
+  _effectPrefab: {fileID: 5895015752162679485, guid: cd42f1420c5c49c4c8581a4d8e1979cf, type: 3}
   forward: {x: 0, y: 1}
 --- !u!61 &5563046367993448023
 BoxCollider2D:
