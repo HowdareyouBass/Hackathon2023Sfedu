@@ -5,10 +5,9 @@ using UnityEngine;
 public class Health : MonoBehaviour
 {
     public event Action Death;
-    public event Action<float> Reduced;
     public event Action Hit;
 
-    [SerializeField] private float _maxHealth;
+    public float MaxHealth;
     public float CurrentHealth{get; private set;}
 
     public void Reduce(float amount)
@@ -16,7 +15,6 @@ public class Health : MonoBehaviour
         if (amount < 0){ throw new System.ArgumentOutOfRangeException("Health reduced cannot be negative"); }
 
         CurrentHealth -= amount;
-        Reduced?.Invoke(amount);
         Hit?.Invoke();
         if (CurrentHealth <= 0)
         {
@@ -27,6 +25,6 @@ public class Health : MonoBehaviour
 
     private void Start()
     {
-        CurrentHealth = _maxHealth;
+        CurrentHealth = MaxHealth;
     }
 }

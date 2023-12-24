@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5ca3af247f16d9489eade4d42d536f9, type: 3}
   m_Name: SmallYellowCircle
   m_EditorClassIdentifier: 
-  Health: 10
+  Health: 5
   Damage: 5
   Prefab: {fileID: 8894089191059890245, guid: 7efb0bc10425eaf408e50447a78fe3d1, type: 3}
