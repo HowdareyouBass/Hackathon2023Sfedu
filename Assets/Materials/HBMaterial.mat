@@ -76,8 +76,8 @@ Material:
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _ThreshHoldMax: 0.8
-    - _ThreshHoldMin: 0.2
+    - _ThreshHoldMax: 1
+    - _ThreshHoldMin: 0
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
