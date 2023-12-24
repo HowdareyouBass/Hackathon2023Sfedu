@@ -4,13 +4,23 @@ Shader "Hidden/RingShader"
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
+        _Color ("Color", Color) = (1, 1, 1, 1)
+        _R1 ("Radius 1", Float) = 0.5
+        _R2 ("Radius 2", Float) = 0.2
     }
     SubShader
     {
  
+        Tags { "RenderType"="Transparent"
+            "Queue"="Transparent" }
+
         Pass
-        {
+        {        
+            ZWrite Off
+            Blend SrcAlpha OneMinusSrcAlpha
+
             CGPROGRAM
+
             #pragma vertex vert
             #pragma fragment frag
  
@@ -36,7 +46,9 @@ Shader "Hidden/RingShader"
                 return o;
             }
  
-            sampler2D _MainTex;
+        float4 _Color;
+        float _R1;
+        float _R2;
  
     fixed4 frag(v2f i) : SV_Target
 			{
@@ -46,11 +58,14 @@ Shader "Hidden/RingShader"
 
 				float d = length(i.uv);
 
-				float r = 0.3;
+                col.rgb = _Color;
+                col.a = 0;
+                
+                if (d > _R2 && d < _R1)
+                {
+                    col.a = 1;
+                }
 
-				float c = smoothstep(r, r - 0.1, d);
-
-				col.rgb = c;
 			    return col;
 			}
             ENDCG

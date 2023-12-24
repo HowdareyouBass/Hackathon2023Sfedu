@@ -13,7 +13,13 @@ public class Shooter : MonoBehaviour
     private readonly object locker = new object();
 
     private float _attackCooldownTimeInSeconds;
+    private Concetration _concetration;
     private Coroutine _shootingRoutine;
+
+    private void Start()
+    {
+        _concetration = GetComponent<Concetration>();
+    }
 
     private void OnEnable()
     {
@@ -28,7 +34,7 @@ public class Shooter : MonoBehaviour
     {
         lock (locker)
         {
-            _attackCooldownTimeInSeconds = _baseAttackSpeed / (float)Plug.Relaxation / 10;
+            _attackCooldownTimeInSeconds = _baseAttackSpeed * (float)_concetration.Value * 10;
         }
         // _attackCooldownTimeInSeconds = (float)BrainBitSignalReader.Relaxation * _baseAttackSpeed;
     }

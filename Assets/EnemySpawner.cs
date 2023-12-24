@@ -1,4 +1,5 @@
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
@@ -23,26 +24,28 @@ public class EnemySpawner : MonoBehaviour
         _bottomLeftSpawnBoxBoundry = _bottomLeftCameraBoundry - _offset;
     }
 
-    public GameObject SpawnEnemy(GameObject enemyPrefab)
+    public GameObject SpawnEnemy(EnemySO enemy)
     {
-        float enemyRadius = enemyPrefab.transform.localScale.x - 2;
+        float enemyRadius = enemy.Prefab.transform.localScale.x - 2;
 
         _topRightCameraBoundry += Vector3.one * enemyRadius;
         _bottomLeftCameraBoundry -= Vector3.one * enemyRadius;
 
         Vector3 spawnPosition = GetRandomPositionOutsideOfCamera();
 
-        GameObject enemy = Instantiate(enemyPrefab);
-        enemy.transform.position = spawnPosition;
-        return enemy;
+        GameObject enemyGO = Instantiate(enemy.Prefab);
+        enemyGO.GetComponent<Health>().MaxHealth = enemy.Health;
+        enemyGO.GetComponent<Enemy>().Damage = enemy.Damage;
+        enemyGO.transform.position = spawnPosition;
+        return enemyGO;
     }
 
-    public GameObject[] SpawnEnemies(GameObject[] enemyPrefabs)
+    public GameObject[] SpawnEnemies(EnemySO[] enemies)
     {
-        GameObject[] result = new GameObject[enemyPrefabs.Length];
-        for(int i = 0; i < enemyPrefabs.Length; i++)
+        GameObject[] result = new GameObject[enemies.Length];
+        for(int i = 0; i < enemies.Length; i++)
         {
-            result[i] = SpawnEnemy(enemyPrefabs[i]);
+            result[i] = SpawnEnemy(enemies[i]);
         }
         return result;
     }

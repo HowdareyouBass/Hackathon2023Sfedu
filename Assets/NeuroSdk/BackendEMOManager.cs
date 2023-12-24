@@ -37,11 +37,13 @@ public class BackendEMOManager : MonoBehaviour
     public void ToTrainingPage()
     {
         _menuEMOScreen.SetActive(false);
+        _resistEMOScreen.SetActive(false);
         _trainingPage.SetActive(true);
     }
     public void ToAnalPage()
     {
         _menuEMOScreen.SetActive(false);
+        _resistEMOScreen.SetActive(false);
         _analPage.SetActive(true);
     }
 
