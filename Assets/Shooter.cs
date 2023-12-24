@@ -33,7 +33,9 @@ public class Shooter : MonoBehaviour
     {
         lock (locker)
         {
-            _attackCooldownTimeInSeconds = _baseAttackSpeed / ((float)_concetration.Value * 10);
+            _attackCooldownTimeInSeconds = _baseAttackSpeed / ((float)_concetration.Value * 10.0f);
+            Debug.Log(_baseAttackSpeed);
+            Debug.Log((float)_concetration.Value * 10.0f);
         }
         // _attackCooldownTimeInSeconds = (float)BrainBitSignalReader.Relaxation * _baseAttackSpeed;
     }

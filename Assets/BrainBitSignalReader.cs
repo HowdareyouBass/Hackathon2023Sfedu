@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using NeuroSDK;
 using SignalMath;
@@ -8,12 +9,15 @@ public class BrainBitSignalReader : MonoBehaviour
 {
     public static double Relaxation { get; private set; }
     public static double Concetration { get; private set; }
+    public static int CalibrationProgress { get; private set; }
 
+    [SerializeField] private ChartManager AlphaRuthm;
+    [SerializeField] private ChartManager BetaRuthm;
+
+    private Coroutine _updateChartsCoroutine;
     private List<BrainBitSignalData> _signalData = new List<BrainBitSignalData>();
     private readonly object locker = new object();
     private EegEmotionalMath _math;
-
-    public static int CalibrationProgress {get; private set;} = 0;
 
     private bool _started = false;
 
@@ -26,6 +30,35 @@ public class BrainBitSignalReader : MonoBehaviour
     private void OnDisable()
     {
         Exit();
+    }
+
+    private IEnumerator UpdateCharts()
+    {
+        while (true)
+        {
+            lock (locker)
+            {
+                int samplesCount = _signalData.Count;
+                if (samplesCount > 0)
+                {
+                    var dataAlpha = new double[samplesCount];
+                    var dataBeta = new double[samplesCount];
+
+                    for (int i = 0; i < samplesCount; i++)
+                    {
+                        dataAlpha[i] = Relaxation;
+                        dataBeta[i] = Concetration;
+                    }
+
+                    AlphaRuthm.AddData(dataAlpha);
+                    BetaRuthm.AddData(dataBeta);
+
+                    _signalData.Clear();
+                }
+            }
+
+            yield return new WaitForSeconds(0.06f);
+        }
     }
 
     public void UpdateSignal()
@@ -65,7 +98,7 @@ public class BrainBitSignalReader : MonoBehaviour
                             Debug.Log(_math.IsBothSidesArtifacted());
                             // and calibration progress
                             CalibrationProgress = _math.GetCallibrationPercents();
-                            //Debug.Log("C: " + _calibrationProgress.ToString());
+                            Debug.Log("C: " + CalibrationProgress.ToString());
 
                             // while(!calibrationFinished)
                             // {
@@ -76,8 +109,8 @@ public class BrainBitSignalReader : MonoBehaviour
                             for (int i = 0; i < mentalData.Length; i++)
                             {
                                 Concetration = mentalData[i].RelAttention;
-                                //Debug.Log(mentalData[i].RelAttention);
-                                //Debug.Log(mentalData[i].RelRelaxation);
+                               // Debug.Log(mentalData[i].RelAttention);
+                               // Debug.Log(mentalData[i].RelRelaxation);
                                 Relaxation = mentalData[i].RelRelaxation;
                             }
                             SpectralDataPercents[] spData = _math.ReadSpectralDataPercentsArr();
@@ -140,10 +173,12 @@ public class BrainBitSignalReader : MonoBehaviour
 
     public void Enter()
     {
+        _updateChartsCoroutine = StartCoroutine(UpdateCharts());
     }
 
     public void Exit()
     {
+        StopCoroutine(_updateChartsCoroutine);
         BrainBitController.Instance.StopSignal();
         BrainBitController.Instance.DisconnectCurrent();
     }
