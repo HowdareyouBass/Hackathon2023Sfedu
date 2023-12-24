@@ -6,9 +6,15 @@ public class CharteUpdater : MonoBehaviour
 {
     [SerializeField] private ChartManager AlphaRuthm;
     [SerializeField] private ChartManager BetaRuthm;
-    
+
     private List<double> _alpha;
     private List<double> _beta;
+
+    private void Awake()
+    {
+        _alpha = new List<double>();
+        _beta = new List<double>();
+    }
 
     private void Update()
     {
